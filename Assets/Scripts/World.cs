@@ -8,12 +8,14 @@ public class World : MonoBehaviour
     [SerializeField] private GameObject wallPrefab;
     [SerializeField] private GameObject waterPrefab;
     [SerializeField] private GameObject wormPrefab;
+    private int yMax;
+    private int xMax;
 
     // Start is called before the first frame update
     void Start()
     {
-        int yMax = (int)Camera.main.orthographicSize;
-        int xMax = (int)(Camera.main.orthographicSize * Camera.main.aspect);
+        yMax = (int)Camera.main.orthographicSize;
+        xMax = (int)(Camera.main.orthographicSize * Camera.main.aspect);
 
         for (int x = -xMax; x < xMax + 1; ++x)
         {
@@ -38,6 +40,18 @@ public class World : MonoBehaviour
             }
         }
         // add worms at random position
+        ResetWorms();
+        
+    }
+    public void ResetWorms()
+    {
+
+        GameObject [] worms = GameObject.FindGameObjectsWithTag("Worm");
+        foreach(GameObject worm in worms)
+        {
+            Destroy(worm);
+        }
+        // add worms at random position
         int numberOfWorms = 100;
         for (int i = 0; i < numberOfWorms; ++i)
         {
@@ -45,9 +59,7 @@ public class World : MonoBehaviour
             float y = Random.Range((float)(-yMax + 1), yMax - 1);
             Instantiate(wormPrefab, new Vector2(x, y), Quaternion.identity);
         }
-        
     }
-
     // Update is called once per frame
     void Update()
     {
