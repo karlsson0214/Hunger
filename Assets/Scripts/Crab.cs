@@ -5,6 +5,12 @@ using UnityEngine;
 public class Crab : MonoBehaviour
 {
     private float speed = 4;
+    // lower speed when hungry
+    private const float SPEED_HUNGRY = 2;
+    // normal speed when in between hungry and over full
+    private const float SPEED_NORMAL = 4;
+    // lower speed when over full
+    private const float SPEED_WHEN_FULL = 2;
     private float angularVelocity = 360;
     private Rigidbody2D rb;
     private int food = 4;
@@ -18,6 +24,7 @@ public class Crab : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0;
+        rb.freezeRotation = true;
     }
 
     // Update is called once per frame
@@ -63,6 +70,18 @@ public class Crab : MonoBehaviour
         {
             timeToNextFood = TIME_TO_FOOD;
             --food;
+            if (food <= 3)
+            {
+                speed = SPEED_HUNGRY;
+            }
+            else if (food <= 6)
+            {
+                speed = SPEED_NORMAL;
+            }
+            else
+            {
+                speed = SPEED_WHEN_FULL;
+            }
             if (hungerDisplay != null)
             {
                 hungerDisplay.SetValue(food);
